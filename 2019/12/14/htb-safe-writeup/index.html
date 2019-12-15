@@ -13,7 +13,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
-<meta name="description" content="htb-safe-writeup"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/atom.xml" title="danta"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
+<meta name="description" content="HTB safe Writeup"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/atom.xml" title="danta"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
 <link rel="canonical" href="https://cxliker.github.io/2019/12/14/htb-safe-writeup/">
 
 <link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css"><link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
@@ -51,7 +51,7 @@
   window.config = {"leancloud":{"app_id":"92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz","app_key":"gAPpmDXQmTGE9s9a3eU4nJ0h"},"toc":true,"fancybox":true,"pjax":true,"latex":false};
 </script>
 
-    <title>htb-safe-writeup - danta</title>
+    <title>HTB safe Writeup - danta</title>
   </head>
 
   <body><div id="mobile-navbar" class="mobile-navbar">
@@ -104,7 +104,7 @@
         <div class="content-wrapper">
           <div id="content" class="content"><article class="post">
     <header class="post-header">
-      <h1 class="post-title">htb-safe-writeup
+      <h1 class="post-title">HTB safe Writeup
         </h1>
 
       <div class="post-meta">
@@ -113,8 +113,8 @@
         </span>
         <span class="post-time">
           2019-12-14 19:29
-        </span><span class="post-visits" data-url="/2019/12/14/htb-safe-writeup/" data-title="htb-safe-writeup">
-          Visits 0
+        </span><span class="post-visits" data-url="/2019/12/14/htb-safe-writeup/" data-title="HTB safe Writeup">
+          阅读次数 0
         </span>
         </div>
     </header>
@@ -124,7 +124,7 @@
     <div class="post-toc-content">
       <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#信息收集"><span class="toc-text">信息收集</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么没扫出来1337端口"><span class="toc-text">为什么没扫出来1337端口</span></a></li></ol></li></ol><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-text">Web</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#逆向"><span class="toc-text">逆向</span></a></li>
     </div>
-  </div><div class="post-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇writeup，靶机是来自hackthebox的[safe]](<a href="https://www.hackthebox.eu/home/machines/profile/199" target="_blank" rel="noopener">https://www.hackthebox.eu/home/machines/profile/199</a>)</p>
+  </div><div class="post-content"><h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这是一篇writeup，靶机是来自hackthebox的<a href="https://www.hackthebox.eu/home/machines/profile/199" target="_blank" rel="noopener">safe</a></p>
 <h1 id="信息收集"><a href="#信息收集" class="headerlink" title="信息收集"></a>信息收集</h1><p>一开始扫全端口，不知道是不是网络问题，怎么都扫不完，后来限制了一下速率：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">kali at ~/htb/safe ❯ nmap -p- --min-rate 10000 -sV -sC -sS 10.10.10.147</span><br><span class="line">Starting Nmap 7.80 ( https://nmap.org ) at 2019-12-14 22:27 EST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.10.147</span><br><span class="line">Host is up (7.6s latency).</span><br><span class="line">Not shown: 61065 filtered ports, 4468 closed ports</span><br><span class="line">PORT   STATE SERVICE VERSION</span><br><span class="line">22/tcp open  ssh     OpenSSH 7.4p1 Debian 10+deb9u6 (protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   2048 6d:7c:81:3d:6a:3d:f9:5f:2e:1f:6a:97:e5:00:ba:de (RSA)</span><br><span class="line">|   256 99:7e:1e:22:76:72:da:3c:c9:61:7d:74:d7:80:33:d2 (ECDSA)</span><br><span class="line">|_  256 6a:6b:c3:8e:4b:28:f7:60:85:b1:62:ff:54:bc:d8:d6 (ED25519)</span><br><span class="line">80/tcp open  http    Apache httpd 2.4.25 ((Debian))</span><br><span class="line">|_http-server-header: Apache/2.4.25 (Debian)</span><br><span class="line">|_http-title: Apache2 Debian Default Page: It works</span><br><span class="line">Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel</span><br></pre></td></tr></table></figure>
 
@@ -140,7 +140,7 @@
 
 <p>打开<code>/manual</code>看看，发现是apache的文档页面，又是默认页面。后来又换了一些字典，发现还是相同的结果。想来想去也没有别的入口的，后来看看别人的writeup才发现原来还可以这样。。。</p>
 <p>查看首页的源码：</p>
-<p><img src="/image/7.jpe" alt></p>
+<p><img src="/image/8.jpg" alt></p>
 <p>里面说还有个1337端口，而且这个程序还可以通过访问路径<code>myapp</code>下载。我是真没想到还可以修改默认页面，看来真是每个细节都不能放过。。</p>
 <p>下载myapp后查看是个可执行文件，执行一下看看，然后再看看1337端口</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">kali at ~/htb/safe ❯ file myapp</span><br><span class="line">myapp: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, <span class="keyword">for</span> GNU/Linux 3.2.0, BuildID[sha1]=fcbd5450d23673e92c8b716200762ca7d282c73a, not stripped</span><br><span class="line">kali at ~/htb/safe ❯ chmod u+x myapp</span><br><span class="line">kali at ~/htb/safe ❯ ./myapp</span><br><span class="line"> 00:23:04 up 1 day, 23:52,  3 users,  load average: 0.00, 0.00, 0.00</span><br><span class="line"></span><br><span class="line">What <span class="keyword">do</span> you want me to <span class="built_in">echo</span> back? ls</span><br><span class="line">ls</span><br><span class="line">kali at ~/htb/safe ❯ nc 10.10.10.147 1337</span><br><span class="line"> 00:26:35 up 18:21,  0 users,  load average: 0.00, 0.00, 0.00</span><br><span class="line">ls</span><br><span class="line"></span><br><span class="line">What <span class="keyword">do</span> you want me to <span class="built_in">echo</span> back? ls</span><br></pre></td></tr></table></figure>
@@ -202,7 +202,7 @@
     var disqus_config = function () {
         this.page.url = 'https://cxliker.github.io/2019/12/14/htb-safe-writeup/';
         this.page.identifier = '2019/12/14/htb-safe-writeup/';
-        this.page.title = 'htb-safe-writeup';
+        this.page.title = 'HTB safe Writeup';
     };
     (function() {
     var d = document, s = d.createElement('script');

@@ -114,7 +114,7 @@
         <span class="post-time">
           2019-12-15 15:10
         </span><span class="post-visits" data-url="/2019/12/15/Defcon-2015-R0pbaby-writeup/" data-title="Defcon 2015 R0pbaby writeup">
-          Visits 0
+          阅读次数 0
         </span>
         </div>
     </header>
@@ -135,7 +135,7 @@
 <p>从上图我们看出<br>功能1：用来获得libc的基地址。<br>功能2：可以获得任意libc function的地址<br>功能3：我们可以发送不超过1024个字符的数据到程序中</p>
 <p>做到现在，事情已经有一点明朗了。<br>不过题目中有一个奇怪的地方是，从功能1获得的libc基地址并不是真正的libc的基地址，因为你可以看到上面的结果，基地址的地址怎么会比system函数的地址还要大？并且基地址的地址并没有页对齐，不是0x1000的倍数（页大小通常4k，即4096bytes）。一个大神的<a href="https://blog.skullsecurity.org/2015/defcon-quals-r0pbaby-simple-64-bit-rop" target="_blank" rel="noopener">writeup</a>中提到说很有可能是题目的bug。<br>不过即使没有libc的基地址，我们有功能2，可以泄漏任何函数的地址，已经足够我们算出libc的基地址了。然后通过泄漏出来的libc中的函数地址，构造rop链利用功能3发送出去getshell。</p>
 <p>为了证明思路，我们用ida分析一下程序：</p>
-<p><img src="/image/7.jpg" alt></p>
+<p><img src="/image/5.png" alt></p>
 <p>程序中用到了<code>memcpy</code>函数，但是并没有检查并限制数据的大小，于是产生了缓冲区溢出漏洞。</p>
 <p><code>memcpy</code>的API：</p>
 <blockquote>
@@ -171,7 +171,7 @@
         <span class="prev-text nav-mobile">上一篇</span>
       </a>
     <a class="next" href="/2019/12/14/htb-safe-writeup/">
-        <span class="next-text nav-default">htb-safe-writeup</span>
+        <span class="next-text nav-default">HTB safe Writeup</span>
         <span class="prev-text nav-mobile">下一篇</span>
         <i class="iconfont icon-right"></i>
       </a>
