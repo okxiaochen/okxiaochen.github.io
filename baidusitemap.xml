@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://cxliker.github.io/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
+    <lastmod>2019-12-15</lastmod>
+  </url>  <url>
+    <loc>https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
+    <lastmod>2019-12-15</lastmod>
+  </url>  <url>
+    <loc>https://cxliker.github.io/2019/12/14/htb-safe-writeup/</loc>
+    <lastmod>2019-12-15</lastmod>
+  </url>  <url>
     <loc>https://cxliker.github.io/2019/12/11/htb-heist/</loc>
     <lastmod>2019-12-14</lastmod>
   </url>  <url>

