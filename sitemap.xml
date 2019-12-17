@@ -2,30 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/14/htb-safe-writeup/</loc>
+    <loc>https://cxliker.github.io/2019/12/16/HTB-Beep-Writeup/</loc>
     
-    <lastmod>2019-12-15T14:23:16.512Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cxliker.github.io/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
-    
-    <lastmod>2019-12-15T12:26:28.424Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
-    
-    <lastmod>2019-12-15T12:26:05.494Z</lastmod>
+    <lastmod>2019-12-17T16:21:30.368Z</lastmod>
     
   </url>
   
   <url>
     <loc>https://cxliker.github.io/2019/12/11/htb-heist/</loc>
     
-    <lastmod>2019-12-15T08:03:12.273Z</lastmod>
+    <lastmod>2019-12-17T15:50:36.155Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://cxliker.github.io/2019/12/14/htb-safe-writeup/</loc>
+    
+    <lastmod>2019-12-17T15:50:17.308Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://cxliker.github.io/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
+    
+    <lastmod>2019-12-16T14:54:38.403Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
+    
+    <lastmod>2019-12-16T14:54:12.114Z</lastmod>
     
   </url>
   
