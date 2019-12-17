@@ -114,7 +114,7 @@
         <span class="post-time">
           2019-12-16 22:00
         </span><span class="post-visits" data-url="/2019/12/16/HTB-Beep-Writeup/" data-title="HTB Beep Writeup">
-          阅读次数 0
+          Visits 0
         </span>
         </div>
     </header>
@@ -140,7 +140,7 @@
 <p>有了密码之后就可以登录了。</p>
 <p>也尝试了代码执行的CVE，但是需要一个电话号码。翻看了下后台找到一个号码：</p>
 <p><img src="/image/10.jpg" alt></p>
-<p>那么那就弹个shell吧，使用<a href="http://www.exploit-db.com/exploits/18649" target="_blank" rel="noopener">http://www.exploit-db.com/exploits/18649</a>稍微改一下payload</p>
+<p>那么那就弹个shell吧，使用<a href="http://www.exploit-db.com/exploits/18649" target="_blank" rel="noopener">http://www.exploit-db.com/exploits/18649</a>来getshell，但是代码中的payload并不奏效，那就从owefsad大佬的文章<a href="https://exexute.github.io/2019/04/24/how-get-a-reverse-shell/" target="_blank" rel="noopener">how get a reverse shell</a>随手挑一个payload试一下。</p>
 <p>没想到这就登录进来了，还是ROOT权限：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[0] % nc -lv 443</span><br><span class="line">sh: no job control <span class="keyword">in</span> this shell</span><br><span class="line">sh-3.2<span class="comment"># ls</span></span><br><span class="line">user.txt</span><br><span class="line">sh-3.2<span class="comment"># whoami</span></span><br><span class="line">root</span><br></pre></td></tr></table></figure>
 
