@@ -2,77 +2,84 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/18/HTB-Lame-Writeup/</loc>
+    <loc>https://danta.fun/2019/12/19/HTB-Tenten-Writeup/</loc>
+    
+    <lastmod>2019-12-20T08:06:24.277Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://danta.fun/2019/12/18/HTB-Lame-Writeup/</loc>
     
     <lastmod>2019-12-18T15:53:36.114Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/16/HTB-Beep-Writeup/</loc>
+    <loc>https://danta.fun/2019/12/16/HTB-Beep-Writeup/</loc>
     
     <lastmod>2019-12-17T16:27:19.612Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/11/htb-heist/</loc>
+    <loc>https://danta.fun/2019/12/11/htb-heist/</loc>
     
     <lastmod>2019-12-17T15:50:36.155Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/14/htb-safe-writeup/</loc>
+    <loc>https://danta.fun/2019/12/14/htb-safe-writeup/</loc>
     
     <lastmod>2019-12-17T15:50:17.308Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
+    <loc>https://danta.fun/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
     
     <lastmod>2019-12-16T14:54:38.403Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
+    <loc>https://danta.fun/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
     
     <lastmod>2019-12-16T14:54:12.114Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/about/index.html</loc>
+    <loc>https://danta.fun/about/index.html</loc>
     
     <lastmod>2019-12-12T13:11:44.124Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/google1d5de9b787ad5dbe.html</loc>
+    <loc>https://danta.fun/google1d5de9b787ad5dbe.html</loc>
     
     <lastmod>2019-08-21T07:03:29.350Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2019/08/21/the-problem-about-fortigate-ssl-vpn-CVE-2018-13379/</loc>
+    <loc>https://danta.fun/2019/08/21/the-problem-about-fortigate-ssl-vpn-CVE-2018-13379/</loc>
     
     <lastmod>2019-08-21T02:52:23.462Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2018/02/08/sqli-labs%E6%8C%91%E6%88%98%E8%AE%B0%E5%BD%95/</loc>
+    <loc>https://danta.fun/2018/02/08/sqli-labs%E6%8C%91%E6%88%98%E8%AE%B0%E5%BD%95/</loc>
     
     <lastmod>2018-02-23T12:25:36.000Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://cxliker.github.io/2018/01/29/XSS%E7%BB%83%E4%B9%A0-alf-nu-alert1-Write-ups/</loc>
+    <loc>https://danta.fun/2018/01/29/XSS%E7%BB%83%E4%B9%A0-alf-nu-alert1-Write-ups/</loc>
     
     <lastmod>2018-01-30T08:55:38.000Z</lastmod>
     

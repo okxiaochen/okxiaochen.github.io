@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://cxliker.github.io/2019/12/18/HTB-Lame-Writeup/</loc>
+    <loc>https://danta.fun/2019/12/19/HTB-Tenten-Writeup/</loc>
+    <lastmod>2019-12-20</lastmod>
+  </url>  <url>
+    <loc>https://danta.fun/2019/12/18/HTB-Lame-Writeup/</loc>
     <lastmod>2019-12-18</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/12/16/HTB-Beep-Writeup/</loc>
+    <loc>https://danta.fun/2019/12/16/HTB-Beep-Writeup/</loc>
     <lastmod>2019-12-17</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/12/11/htb-heist/</loc>
+    <loc>https://danta.fun/2019/12/11/htb-heist/</loc>
     <lastmod>2019-12-17</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/12/14/htb-safe-writeup/</loc>
+    <loc>https://danta.fun/2019/12/14/htb-safe-writeup/</loc>
     <lastmod>2019-12-17</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
+    <loc>https://danta.fun/2019/12/15/PlaidCTF-2013-ropasaurusrex-writeup/</loc>
     <lastmod>2019-12-16</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
+    <loc>https://danta.fun/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
     <lastmod>2019-12-16</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2019/08/21/the-problem-about-fortigate-ssl-vpn-CVE-2018-13379/</loc>
+    <loc>https://danta.fun/2019/08/21/the-problem-about-fortigate-ssl-vpn-CVE-2018-13379/</loc>
     <lastmod>2019-08-21</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2018/02/08/sqli-labs%E6%8C%91%E6%88%98%E8%AE%B0%E5%BD%95/</loc>
+    <loc>https://danta.fun/2018/02/08/sqli-labs%E6%8C%91%E6%88%98%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2018-02-23</lastmod>
   </url>  <url>
-    <loc>https://cxliker.github.io/2018/01/29/XSS%E7%BB%83%E4%B9%A0-alf-nu-alert1-Write-ups/</loc>
+    <loc>https://danta.fun/2018/01/29/XSS%E7%BB%83%E4%B9%A0-alf-nu-alert1-Write-ups/</loc>
     <lastmod>2018-01-30</lastmod>
   </url>
 </urlset>
