@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://danta.fun/links/index.html</loc>
+    
+    <lastmod>2020-05-18T12:10:22.151Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://danta.fun/2019/12/19/HTB-Tenten-Writeup/</loc>
     
     <lastmod>2019-12-20T08:06:24.277Z</lastmod>
