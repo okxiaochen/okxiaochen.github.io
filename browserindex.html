@@ -1,0 +1,15 @@
+<html>
+<script>
+    pages = ["http://sec.today/", "https://www.freebuf.com", "http://h1.nobbd.de/", "http://wiki.ioin.in/", "http://pentester.land", "https://i.hacking8.com", "https://sec.thief.one"]
+
+    if (localStorage.getItem('count') == null) {
+        localStorage.setItem("count", -1)
+    } 
+
+    count = (parseInt(localStorage.getItem('count')) + 1) % pages.length
+    localStorage.setItem("count", count)
+
+    window.location.href = pages[count]
+</script>
+
+</html>
