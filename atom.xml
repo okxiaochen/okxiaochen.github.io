@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://danta.fun/"/>
-  <updated>2020-07-23T06:41:08.403Z</updated>
+  <updated>2020-07-25T14:16:48.727Z</updated>
   <id>https://danta.fun/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>android-pages-02</title>
+    <link href="https://danta.fun/2020/07/25/android-pages-02/"/>
+    <id>https://danta.fun/2020/07/25/android-pages-02/</id>
+    <published>2020-07-25T14:14:21.000Z</published>
+    <updated>2020-07-25T14:16:48.727Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="# 前言"></a># 前言</h1><p>如果App的运行环境不正常，则可能会带来安全风险。目前有下面三个方面的检查：</p><ol><li>是否处于已经获取Root的Android系统</li><li>是否处于Android模拟器</li><li>是否使用了Xposed等逆向框架</li></ol><h1 id="Android系统的安全模型"><a href="#Android系统的安全模型" class="headerlink" title="# Android系统的安全模型"></a># Android系统的安全模型</h1><p>Linux是一个多用户操作系统，其中的用户管理机制可以使不同的用户相互隔离，例如不同用户创建的文件无法相互访问，不同用户创建的程序不会相互耗尽内存或者CPU等资源。Android系统虽然基于Linux系统内核，但是没有多用户的需求。手机只是自己一个人，需要啥多用户呢？所以就把多用户那套东西（用户管理机制）用到了App的沙箱设计中。每一个应用对应一个不同的系统用户，不同的应用运行在不同的沙箱中（除少数特例外），就像Linux那样相互隔离不同用户。在这里，涉及到了两个方面：用户管理和沙箱。</p><h2 id="用户管理"><a href="#用户管理" class="headerlink" title="## 用户管理"></a>## 用户管理</h2><p>Linux内核的用户管理是其最基本的一个安全特性，基于用户去进行资源隔离，一个用户在没有明确授权的情况下，是无法访问另一个用户的文件的。而且每个进程在运行的时候，也会带着用户的标志，也就是UID（User ID，用户ID）和GID（Group ID，用户组ID），以此来表明这个进程所拥有的权限，保证资源隔离和进程隔离。</p><p>Linux中是对每一个物理用户分配一个UID，而在Android中，则是对每一个App分配一个UID，从而达到隔离不同App的效果，这也是Android沙箱的基础。我们在使用App的过程中，也会遇到App想要申请相机权限，短信权限等等。而这些权限，则对应着不同的GID，一个App可以拥有多个GID。如果我们同意授权，则该GID会被添加到App的进程中。</p><p>上述都说到Android是一个单物理用户的系统，但是架不住日益的发展，Android系统不仅是在手机上使用，还有很多例如平板计算机等设备，是有多物理用户的场景的。所以从Android4.2开始，Android在除了手机以外的设备也开始实现了多用户管理特性。但是Linux的多用户管理机制已经被用在了App隔离上了，那可咋整呢？那只能自己重新实现一套了呗…..</p><p>查看Android系统是否支持多物理用户，可以在Android源代码中的UserHandler.java中查看MU_ENABLED是否设置为true。</p><p>在多用户系统下，不同的用户可能会安装相同的App，但是同一个App的UID是一样的。那么为了区分不同的用户安装的同一个App，会生成新的一个唯一的”UID“用于区分。我们在这里更多的讨论的还是单物理用户的Android系统。</p><h2 id="系统沙箱"><a href="#系统沙箱" class="headerlink" title="## 系统沙箱"></a>## 系统沙箱</h2><p>什么是安卓的系统沙箱呢？指的是每一个App是单独运行在自己的沙箱中的。其表现在：</p><ol><li>每个App拥有自己的UID，使用该UID来启动进程。不同UID代表不同的权限，以此来控制App的权限。更进一步的，每个App都会实例化自己的Dalvik虚拟机，增强了隔离性和安全性。不同的APP在各自进程和Dalvik虚拟机中执行。其进程、代码、数据都得到隔离。</li><li>App在安装后会在<code>/data/data</code> 目录中（多用户设备中是在<code>/data/user/userID/</code> 目录下），以自身的包名为文件名、以App的UID为所有者权限创建文件夹，存放App运行时所需的文件和资源。非该UID的APP进程无法访问和写入该文件夹的所有内容。（PS1：需要注意的是，大多数情况下App所产生的数据都会存在该文件夹中，但也会有存在外置的SD卡中。而SD卡中的存储空间是对App开放的，所有App都可读可写）（PS2：Android提供了一个特性，可以通过UID共享的方式来允许不同App进行资源分享、相互调用等）</li></ol><h1 id="Root检测"><a href="#Root检测" class="headerlink" title="# Root检测"></a># Root检测</h1><h2 id="系统Root之后有什么风险？"><a href="#系统Root之后有什么风险？" class="headerlink" title="## 系统Root之后有什么风险？"></a>## 系统Root之后有什么风险？</h2><p>上面学了这么多的啥用户管理，啥沙箱的，都是为了介绍Android是如何保证数据和资源不被其他App窃取或者修改的。系统Root了之后，代表手机开放了管理员权限，上述谈的用户管理与沙箱机制都失效了。每一个App都可以用Root的权限来运行，而Root是系统里的最高权限，可以查看任意文件与执行任意操作，比如没办法删的系统自带软件Root了之后就可以删除了。换句话说，这就代表着每一个App，包括心怀鬼胎的App，都可以对设备进行任意的操作了，这是存在了极大的风险，容易被恶意利用，例如删除系统重要文件、劫持App、窃取App信息、篡改App运行时数据等等。</p><h2 id="如何检测"><a href="#如何检测" class="headerlink" title="## 如何检测"></a>## 如何检测</h2><p>最常见的方法，在设备上找到su文件。该程序默认不会有，Root之后的系统使用该程序来进行提权。</p><ol><li>检查在<code>/system/bin</code> 或<code>/system/xbin</code> 目录下是否存在可执行文件su</li><li>检查在PATH上是否存在su</li><li>执行su或检查进程：比如SuperSU（一个流行的ROOT工具）会启动一个守护进行，检查是否存在该进程。</li></ol><h1 id="Android模拟器"><a href="#Android模拟器" class="headerlink" title="# Android模拟器"></a># Android模拟器</h1><h2 id="安全风险"><a href="#安全风险" class="headerlink" title="## 安全风险"></a>## 安全风险</h2><p>吃鸡手游刚风靡大学生的时候，我的同学就曾经给我展示够如何在电脑上用安卓模拟器来玩吃鸡手游，用键盘的速度来虐手指的速度。。。对于游戏App来说，这种行为当然是破坏了游戏的公平性。除此之外，还有”刷流量“，”刷单“，”薅羊毛“等等现象都是可以使用安卓模拟器来进行批量的操作，使得企业蒙受大量的经济损失。在羊毛党面前，手指的速度是如何比得上机器的速度呢？所以App是否运行在安卓模拟器，也是App运营中安全风控的一个重要环节。</p><h2 id="检测方式"><a href="#检测方式" class="headerlink" title="## 检测方式"></a>## 检测方式</h2><p>基本上的检测方式都是基于模拟器和真机之间的差异进行检测的，比如电池状态是否为0，蓝牙模块是否有名字，设备温度等。但是这种检测都容易被绕过，毕竟模拟器都可以伪造。还有一些方法是基于模拟器的体系架构来检测，比如CPU的程序计数器的处理方式不一致，或者对于Cache的使用方法不一致等。这种基于底层的检测会更精准一些。除了基于体系架构的检测不好修改之外，其他的大部分都能通过自定义ROM或者Runtime hook伪装。只是在实现上模拟器与真机的差异很难覆盖的全。</p><p>参考：</p><p><a href="https://www.zhihu.com/question/21355176" target="_blank" rel="noopener">如何判断Android设备是真机还是模拟器？</a></p><h1 id="Hook框架"><a href="#Hook框架" class="headerlink" title="# Hook框架"></a># Hook框架</h1><h2 id="安全风险-1"><a href="#安全风险-1" class="headerlink" title="## 安全风险"></a>## 安全风险</h2><p>如果我们想要修改App中的某个函数的逻辑，通过反编译或逆向等手段进行静态分析往往是一个比较复杂的过程。而Hook框架可以在不修改源码的情况下，对函数的结果进行加工处理，也可以对App的运行流程和逻辑进行动态分析。比如破解App的签名算法，如果只凭静态分析，万一碰上混淆或加固的情况，本来的头秃就变得更秃了，而依赖Hook进行动态分析，就会事半功倍。目前广泛使用的Hook框架，有Xposed，Cydia和Frida。不同的Hook框架能力不同，原理也不一样。这个说起来就很复杂了，到时候应另起一文。</p><h2 id="检测方式-1"><a href="#检测方式-1" class="headerlink" title="## 检测方式"></a>## 检测方式</h2><p>这里的检测思路与安卓模拟器的检测思路大体一致。检查App安装列表，检查异常堆栈信息，检查hook框架的相关文件等方式。关于此的一些防护手段与绕过方式，应该会另起一文进行探究。</p><p>参考：</p><p><a href="https://zhuanlan.zhihu.com/p/113046537" target="_blank" rel="noopener">安卓反调试|常见的Xposed框架检测手段与突破方式</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;# 前言&quot;&gt;&lt;/a&gt;# 前言&lt;/h1&gt;&lt;p&gt;如果App的运行环境不正常，则可能会带来安全风险。目前有下面三个方面的检查：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;是否处于已经获取Root的A
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>安卓测试01 初步了解Android</title>
