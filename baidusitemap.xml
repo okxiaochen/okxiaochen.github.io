@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://danta.fun/2019/12/18/HTB-Lame-Writeup/</loc>
+    <lastmod>2020-07-25</lastmod>
+  </url>  <url>
+    <loc>https://danta.fun/2019/12/16/HTB-Beep-Writeup/</loc>
+    <lastmod>2020-07-25</lastmod>
+  </url>  <url>
+    <loc>https://danta.fun/2019/12/19/HTB-Tenten-Writeup/</loc>
+    <lastmod>2020-07-25</lastmod>
+  </url>  <url>
     <loc>https://danta.fun/2020/07/25/android-pages-02/</loc>
     <lastmod>2020-07-25</lastmod>
   </url>  <url>
@@ -9,15 +18,6 @@
   </url>  <url>
     <loc>https://danta.fun/2019/12/15/Defcon-2015-R0pbaby-writeup/</loc>
     <lastmod>2020-07-23</lastmod>
-  </url>  <url>
-    <loc>https://danta.fun/2019/12/19/HTB-Tenten-Writeup/</loc>
-    <lastmod>2019-12-20</lastmod>
-  </url>  <url>
-    <loc>https://danta.fun/2019/12/18/HTB-Lame-Writeup/</loc>
-    <lastmod>2019-12-18</lastmod>
-  </url>  <url>
-    <loc>https://danta.fun/2019/12/16/HTB-Beep-Writeup/</loc>
-    <lastmod>2019-12-17</lastmod>
   </url>  <url>
     <loc>https://danta.fun/2019/12/11/htb-heist/</loc>
     <lastmod>2019-12-17</lastmod>
